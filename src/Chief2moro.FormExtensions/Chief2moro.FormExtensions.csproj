@@ -182,15 +182,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionalDisplayInstructionModel.cs" />
     <Compile Include="ConditionalDataModel.cs" />
+    <Compile Include="ConditionalDisplayFormElementBlock.cs" />
     <Compile Include="ConditionalOveriddenValueElementBlock.cs" />
+    <Compile Include="FormElementHelper.cs" />
     <Compile Include="FormExtensionsInitialisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyConditionalDataModelList.cs" />
     <Compile Include="SiblingFormElementSelectionFactory%27T.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Chief2moro.FormExtensions.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+    <Content Include="ClientResources\Scripts\FormExtensions\ConditionalDisplayFormElement.js" />
+    <Content Include="Views\Shared\ElementBlocks\ConditionalOveriddenValueElementBlock.cshtml" />
+    <Content Include="Views\Shared\ElementBlocks\ConditionalDisplayFormElementBlock.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Chief2moro.FormExtensions")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A package containing additional form elements allowing the conditional submission of data")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Mark Everard")]
 [assembly: AssemblyProduct("Chief2moro.FormExtensions")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

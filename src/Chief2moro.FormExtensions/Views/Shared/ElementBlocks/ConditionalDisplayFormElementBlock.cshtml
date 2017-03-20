@@ -1,0 +1,42 @@
+﻿@using EPiServer.Editor
+@using EPiServer.Framework.Web.Resources
+@using EPiServer.ServiceLocation
+@model Chief2moro.FormExtensions.ConditionalDisplayFormElementBlock
+
+@{
+    //include the necessary 
+    var clientResources = ServiceLocator.Current.GetInstance<IRequiredClientResourceList>();
+    clientResources.RequireScript("/ClientResources/Scripts/FormExtensions/ConditionalDisplayFormElement.js", "ConditionalDisplayFormElement", new[] { "Forms.jquery.js"}).AtFooter();
+}
+
+
+
+@*//inherit from base form elemnt - maybe hidden field?
+//model will have two properties - Conditional element 
+//object
+-- conditional element value
+-- target element
+-- action if value is met (show or hide to start)
+
+//view will output instructions for how to wire up change events - json of above?
+//resource injected into seite footer
+//checks for epiforms jquery
+//reads all conditionalinstructions
+//for each instruction wires up conditional events*@
+
+
+@if (PageEditing.PageIsInEditMode)
+{
+    <p style="border-radius: 4px; padding: 8px 35px 8px 14px; color: black; font-family: Verdana; font-size: 1em; font-style: italic; background-color: #fdf490; text-align: center;">
+        This form element will conditionally show these elements <strong>'@Model.GetTargetElementNames()'</strong>, if the value of <strong>'@Model.GetSourceElementName()'</strong> is <strong>'@Model.PredefinedValue'</strong>.
+</p>
+}
+else
+{
+    <script type="application/json" data-formcondition="@Model.Content.ContentGuid">
+        @Html.Raw(value: Model.ToJson())
+    </script>
+}
+
+
+

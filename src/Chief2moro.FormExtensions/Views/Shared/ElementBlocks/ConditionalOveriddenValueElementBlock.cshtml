@@ -1,0 +1,9 @@
+﻿@using EPiServer.Editor
+@model Chief2moro.FormExtensions.ConditionalOveriddenValueElementBlock
+
+@if (PageEditing.PageIsInEditMode)
+{ 
+    <p style="border-radius: 4px; padding: 8px 35px 8px 14px; color: black; font-family: Verdana; font-size: 1em; font-style: italic; background-color: #fdf490; text-align: center;">
+        This form element will set the specified value in the submitted data, if the value of <strong>'@Model.GetSourceElementName()'</strong> is either of <strong>'@Model.GetSourceValues()'</strong>
+    </p>
+}

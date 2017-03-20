@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Forms.Core.Events;
-using EPiServer.Forms.Implementation.Elements;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
@@ -24,7 +22,7 @@ namespace Chief2moro.FormExtensions
 
         private void FormsEvents_FormsSubmissionFinalized(object sender, FormsEventArgs e)
         {
-            var submitEventArgs = e as FormsSubmittingEventArgs;
+             var submitEventArgs = e as FormsSubmittingEventArgs;
             if (submitEventArgs == null)
                 return;
 
@@ -67,7 +65,8 @@ namespace Chief2moro.FormExtensions
 
         public void Uninitialize(InitializationEngine context)
         {
-          
+            var formsEvents = ServiceLocator.Current.GetInstance<FormsEvents>();
+            formsEvents.FormsSubmitting -= FormsEvents_FormsSubmissionFinalized;
         }
 
         public void Preload(string[] parameters)
