@@ -47,76 +47,77 @@ if (typeof $$epiforms !== 'undefined') {
         //DEBUG
         //console.log(JSON.stringify(showhideInstructions));
 
-        //For each instruction bind an change event handler to the element
+        //For each instruction set initial state and bind an change event handler to the element to modify state
         for (var i = 0; i < showhideInstructions.length; i++) {
 
             //hide all affected element
-            var elementsToHide = showhideInstructions[i].Hide;
+            conditionalDisplayHideElements(showhideInstructions[i].Hide);
+            //show all elements that have show instruction based on current form state (post-validation)
+            var sourceElement = $$epiforms('#' + showhideInstructions[i].SourceElement);
+            conditionalDisplaySetElements(showhideInstructions[i], sourceElement.val());
+            
+            //bind event handler
+            $$epiforms(sourceElement).change(function () {
 
-            //Initially hide all elements for this source
-            for (var n = 0; n < elementsToHide.length; n++) {
-
-                //console.log("Hiding element : " + elementsToHide[n]);
-                var formfieldToHide = $$epiforms('#' + elementsToHide[n]);
-                var wrapperNameToHide = formfieldToHide.attr("name");
-                //hide wrapping form field 
-                $$epiforms('[data-epiforms-element-name=' + wrapperNameToHide + ']').hide();
-                //HACK - set a default value to pass simple validation
-                formfieldToHide.val("N/A");
-            }
-
-            $$epiforms('#' + showhideInstructions[i].SourceElement).change(function () {
-                
                 var localElement = $$epiforms(this);
                 var currentElementId = localElement.attr('id');
                 var currentElementValue = localElement.val();
-                
-                //console.log('|CHANGE|' + currentElementValue);
 
                 //get instruction for current source from original show hide instructions array
                 var instructionForElement = showhideInstructions.filter(function (item) {
                     return item.SourceElement === currentElementId;
                 });
 
-                var currentInstruction = instructionForElement[0];
-
-                //hide all elements for this source
-                for (var k = 0; k < currentInstruction.Hide.length; k++) {
-
-                    //console.log("Hiding element : " + currentInstruction.Hide[k]);
-                    var formfieldToHide = $$epiforms('#' + currentInstruction.Hide[k]);
-                    var wrapperNameToHide = formfieldToHide.attr("name");
-                    //hide wrapping form field 
-                    $$epiforms('[data-epiforms-element-name=' + wrapperNameToHide + ']').hide();
-                    //HACK - set a default value to pass simple validation
-                    formfieldToHide.val("N/A");
-                }
-
-                for (var j = 0; j < currentInstruction.Instructions.length; j++) {
-
-                    var localInstruction = currentInstruction.Instructions[j];
-                    //if current element valuematches the instruction value                   
-                    if (currentElementValue === localInstruction.Value) {
-
-                       // console.log('Showing elements for value : ' + localInstruction.Value);
-                        for (var l = 0; l < localInstruction.Show.length; l++) {
-
-                            //console.log("Showing element : " + localInstruction.Show[l]);
-                            var formfield = $$epiforms('#' + localInstruction.Show[l]);
-                            var wrapperName = formfield.attr("name");
-                            $$epiforms('[data-epiforms-element-name=' + wrapperName + ']').show();
-                            
-                            var currentFieldValue = formfield.val();
-                           
-                            //HACK - if form field value is default then empty it
-                            if (currentFieldValue === "N/A") {
-                                //console.log("Default value :" + formfield.attr("name"));
-                                formfield.val("");
-                            }
-                        }
-                    }
-                }
+                conditionalDisplaySetElements(instructionForElement[0], currentElementValue);
             });
         }
     });
+
+    function conditionalDisplaySetElements(instructionForElement, value) {
+
+        //console.log("|CHANGE|" + value);
+        //console.log("Instruction");
+        //console.log(JSON.stringify(instructionForElement));
+
+        //hide all elements in this instruction
+        conditionalDisplayHideElements(instructionForElement.Hide);
+
+        for (var j = 0; j < instructionForElement.Instructions.length; j++) {
+
+            var localInstruction = instructionForElement.Instructions[j];
+            //if current element valuematches the instruction value                   
+            if (value === localInstruction.Value) {
+
+                // console.log('Showing elements for value : ' + localInstruction.Value);
+                for (var l = 0; l < localInstruction.Show.length; l++) {
+
+                    //console.log("Showing element : " + localInstruction.Show[l]);
+                    var formfield = $$epiforms('#' + localInstruction.Show[l]);
+                    var wrapperName = formfield.attr("name");
+                    $$epiforms('[data-epiforms-element-name=' + wrapperName + ']').show();
+
+                    var currentFieldValue = formfield.val();
+
+                    //HACK - if form field value is default then empty it
+                    if (currentFieldValue === "N/A") {
+                        //console.log("Default value :" + formfield.attr("name"));
+                        formfield.val("");
+                    }
+                }
+            }
+        }
+    }
+
+    function conditionalDisplayHideElements(elementsToHide) {
+
+        for (var n = 0; n < elementsToHide.length; n++) {
+            //console.log("Hiding element : " + elementsToHide[n]);
+            var formfieldToHide = $$epiforms('#' + elementsToHide[n]);
+            var wrapperNameToHide = formfieldToHide.attr("name");
+            //hide wrapping form field 
+            $$epiforms('[data-epiforms-element-name=' + wrapperNameToHide + ']').hide();
+            //HACK - set a default value to pass simple validation
+            formfieldToHide.val("N/A");
+        }
+    }
 }
