@@ -44,10 +44,26 @@ if (typeof $$epiforms !== 'undefined') {
             }
         });
 
-        console.log(JSON.stringify(showhideInstructions));
+        //DEBUG
+        //console.log(JSON.stringify(showhideInstructions));
 
         //For each instruction bind an change event handler to the element
         for (var i = 0; i < showhideInstructions.length; i++) {
+
+            //hide all affected element
+            var elementsToHide = showhideInstructions[i].Hide;
+
+            //Initially hide all elements for this source
+            for (var n = 0; n < elementsToHide.length; n++) {
+
+                //console.log("Hiding element : " + elementsToHide[n]);
+                var formfieldToHide = $$epiforms('#' + elementsToHide[n]);
+                var wrapperNameToHide = formfieldToHide.attr("name");
+                //hide wrapping form field 
+                $$epiforms('[data-epiforms-element-name=' + wrapperNameToHide + ']').hide();
+                //HACK - set a default value to pass simple validation
+                formfieldToHide.val("N/A");
+            }
 
             $$epiforms('#' + showhideInstructions[i].SourceElement).change(function () {
                 
@@ -55,9 +71,9 @@ if (typeof $$epiforms !== 'undefined') {
                 var currentElementId = localElement.attr('id');
                 var currentElementValue = localElement.val();
                 
-                console.log('|CHANGE|' + currentElementValue);
+                //console.log('|CHANGE|' + currentElementValue);
 
-                //get instruction for current source from original showhise instructions array
+                //get instruction for current source from original show hide instructions array
                 var instructionForElement = showhideInstructions.filter(function (item) {
                     return item.SourceElement === currentElementId;
                 });
@@ -67,7 +83,7 @@ if (typeof $$epiforms !== 'undefined') {
                 //hide all elements for this source
                 for (var k = 0; k < currentInstruction.Hide.length; k++) {
 
-                    console.log("Hiding element : " + currentInstruction.Hide[k]);
+                    //console.log("Hiding element : " + currentInstruction.Hide[k]);
                     var formfieldToHide = $$epiforms('#' + currentInstruction.Hide[k]);
                     var wrapperNameToHide = formfieldToHide.attr("name");
                     //hide wrapping form field 
@@ -79,15 +95,13 @@ if (typeof $$epiforms !== 'undefined') {
                 for (var j = 0; j < currentInstruction.Instructions.length; j++) {
 
                     var localInstruction = currentInstruction.Instructions[j];
-                    
+                    //if current element valuematches the instruction value                   
                     if (currentElementValue === localInstruction.Value) {
 
-                        console.log('Showing elements for value : ' + localInstruction.Value);
-
+                       // console.log('Showing elements for value : ' + localInstruction.Value);
                         for (var l = 0; l < localInstruction.Show.length; l++) {
 
-                            console.log("Showing element : " + localInstruction.Show[l]);
-
+                            //console.log("Showing element : " + localInstruction.Show[l]);
                             var formfield = $$epiforms('#' + localInstruction.Show[l]);
                             var wrapperName = formfield.attr("name");
                             $$epiforms('[data-epiforms-element-name=' + wrapperName + ']').show();
@@ -96,11 +110,8 @@ if (typeof $$epiforms !== 'undefined') {
                            
                             //HACK - if form field value is default then empty it
                             if (currentFieldValue === "N/A") {
-                                console.log("Default value :" + formfield.attr("name"));
+                                //console.log("Default value :" + formfield.attr("name"));
                                 formfield.val("");
-                            } else {
-                                console.log("Not default value");
-
                             }
                         }
                     }

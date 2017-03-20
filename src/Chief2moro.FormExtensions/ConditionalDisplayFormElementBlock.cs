@@ -5,9 +5,9 @@ using EPiServer.Forms.Implementation.Elements.BaseClasses;
 using EPiServer.Shell.ObjectEditing;
 using Newtonsoft.Json;
 
-namespace Chief2moro.FormExtensions
+namespace Cosmos.Web.Ui.Business.Forms
 {
-    [ContentType(GUID = "95A98808-4BFC-43FE-B723-4FD2F7E0FF1B", GroupName = "Conditional Elements", DisplayName = "Conditional Field Display", Order = 5000)]
+    [ContentType(GUID = "95A98808-4BFC-43FE-B723-4FD2F7E0FF1B", GroupName = "Conditional Elements", DisplayName = "Conditional field display", Order = 5000)]
     public class ConditionalDisplayFormElementBlock : HiddenElementBlockBase
     {
      
